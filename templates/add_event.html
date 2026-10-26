@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{% if event %}Edit event{% else %}Add event{% endif %} — EventFlow{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      <a class="text-decoration-none small" href="{{ url_for('index') }}">← Back to events</a>
+      <div class="card mt-3">
+        <div class="card-body p-4 p-md-5">
+          <p class="text-uppercase small fw-bold text-primary mb-2">{% if event %}Make a change{% else %}Plan something{% endif %}</p>
+          <h1 class="h3 fw-bold mb-1">{% if event %}Edit your event{% else %}Create an event{% endif %}</h1>
+          <p class="text-muted-custom mb-4">A little planning goes a long way.</p>
+
+          <form method="post" novalidate>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="title">Event title <span class="text-danger">*</span></label>
+              <input class="form-control {% if errors.get('title') %}is-invalid{% endif %}"
+                     id="title" name="title" maxlength="200" required
+                     value="{{ values.title }}" placeholder="e.g. Design project check-in"
+                     aria-describedby="{% if errors.get('title') %}title-error{% endif %}">
+              {% if errors.get("title") %}<div class="invalid-feedback" id="title-error">{{ errors.title }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="description">Description <span class="text-muted fw-normal">(optional)</span></label>
+              <textarea class="form-control" id="description" name="description" rows="4" placeholder="Add a few details to remember...">{{ values.description }}</textarea>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="date">Date <span class="text-danger">*</span></label>
+                <input class="form-control {% if errors.get('date') %}is-invalid{% endif %}"
+                       id="date" name="date" type="date" required value="{{ values.date }}"
+                       aria-describedby="{% if errors.get('date') %}date-error{% endif %}">
+                {% if errors.get("date") %}<div class="invalid-feedback" id="date-error">{{ errors.date }}</div>{% endif %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="category">Category</label>
+                <select class="form-select {% if errors.get('category') %}is-invalid{% endif %}" id="category" name="category">
+                  {% for category in categories %}
+                    <option value="{{ category }}" {% if values.category == category %}selected{% endif %}>{{ category }}</option>
+                  {% endfor %}
+                </select>
+                {% if errors.get("category") %}<div class="invalid-feedback">{{ errors.category }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 border-top mt-4 pt-3">
+              <a class="btn btn-light" href="{{ url_for('index') }}">Cancel</a>
+              <button class="btn btn-primary px-4" type="submit">{% if event %}Save changes{% else %}Create event{% endif %}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>{% block title %}EventFlow — Your plans, in flow{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      :root {
+        --flow-ink: #26314b;
+        --flow-muted: #7e899f;
+        --flow-blue: #526fd2;
+        --flow-line: #e8ecf4;
+        --flow-bg: #f5f7fb;
+      }
+      body { min-height: 100vh; color: var(--flow-ink); background: var(--flow-bg); }
+      .navbar { background: rgba(255,255,255,.92); border-bottom: 1px solid var(--flow-line); }
+      .navbar-brand { color: var(--flow-ink); font-weight: 800; letter-spacing: -.7px; }
+      .brand-mark { color: var(--flow-blue); }
+      .page-wrap { max-width: 1120px; }
+      .hero { position: relative; overflow: hidden; border: 1px solid #e9edf7; border-radius: 1.25rem; background: linear-gradient(115deg,#fff 8%,#f5f7ff 100%); }
+      .hero-title { color: var(--flow-ink); font-weight: 800; letter-spacing: -1.6px; }
+      .text-muted-custom { color: var(--flow-muted); }
+      .btn-primary { --bs-btn-bg: var(--flow-blue); --bs-btn-border-color: var(--flow-blue); --bs-btn-hover-bg: #405bb8; --bs-btn-hover-border-color: #405bb8; }
+      .card { border: 1px solid var(--flow-line); border-radius: .9rem; box-shadow: 0 4px 16px rgba(43,57,96,.035); }
+      .category-work { color: #4f6bc2; background: #edf1ff; }
+      .category-personal { color: #36876c; background: #e9f6f0; }
+      .category-study { color: #a87828; background: #fff4df; }
+      .filter-link { color: var(--flow-muted); text-decoration: none; }
+      .filter-link:hover, .filter-link.active { color: var(--flow-blue); }
+      .form-control, .form-select { border-color: #dfe5ef; }
+      .form-control:focus, .form-select:focus { border-color: #9cace7; box-shadow: 0 0 0 .2rem rgba(82,111,210,.12); }
+      .empty-state { border: 1px dashed #d9dfeb; border-radius: .9rem; background: rgba(255,255,255,.65); }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand">
+      <div class="container page-wrap py-2">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('index') }}">
+          <span class="brand-mark" aria-hidden="true">◆</span> eventflow<span class="brand-mark">.</span>
+        </a>
+        <div class="d-flex align-items-center gap-3">
+          <span class="small text-muted-custom d-none d-sm-inline">A little space for what matters</span>
+          <a class="btn btn-primary btn-sm rounded-3 px-3" href="{{ url_for('add_event') }}">+ Add event</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container page-wrap py-4 py-md-5">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="container page-wrap pb-4 d-flex justify-content-between small text-muted-custom">
+      <span>Make room for what matters.</span>
+      <span>EVENTFLOW</span>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

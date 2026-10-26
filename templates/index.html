@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}EventFlow — Your plans, in flow{% endblock %}
+
+{% block content %}
+  <section class="hero p-4 p-md-5 mb-5">
+    <div class="row align-items-center gy-4">
+      <div class="col-md-8">
+        <p class="text-uppercase small fw-bold text-primary mb-2">Your space to get things done</p>
+        <h1 class="hero-title display-5 mb-2">Make room for<br><span class="text-primary">what matters.</span></h1>
+        <p class="text-muted-custom mb-0">All your plans, in one calm, organized place.</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a class="btn btn-primary btn-lg rounded-3 px-4" href="{{ url_for('add_event') }}">+ Add an event</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="events-heading">
+    <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
+      <div>
+        <p class="text-uppercase small fw-bold text-muted-custom mb-1">Your plans</p>
+        <h2 id="events-heading" class="h3 fw-bold mb-0">Events <span class="badge rounded-pill text-bg-light align-middle fs-6">{{ total_count }}</span></h2>
+      </div>
+      <form class="d-flex gap-2" method="get" action="{{ url_for('index') }}" role="search">
+        {% if active_category != "All" %}
+          <input type="hidden" name="category" value="{{ active_category }}">
+        {% endif %}
+        <label class="visually-hidden" for="event-search">Search events</label>
+        <input class="form-control" id="event-search" type="search" name="search" value="{{ search }}" placeholder="Search events">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+    </div>
+
+    <nav class="d-flex flex-wrap gap-3 border-bottom mb-4 pb-2" aria-label="Filter events by category">
+      {% for category in ("All",) + categories %}
+        <a class="filter-link {% if active_category == category %}active fw-semibold{% endif %}"
+           href="{{ url_for('index', category=category, search=search or None) }}"
+           {% if active_category == category %}aria-current="page"{% endif %}>{{ category }}</a>
+      {% endfor %}
+    </nav>
+
+    {% if events %}
+      <div class="row g-3">
+        {% for event in events %}
+          <div class="col-md-6 col-lg-4">
+            <article class="card h-100">
+              <div class="card-body d-flex flex-column p-4">
+                <div class="mb-3">
+                  <span class="badge rounded-pill category-{{ event.category|lower }}">{{ event.category }}</span>
+                </div>
+                <h3 class="h5 fw-bold mb-2">{{ event.title }}</h3>
+                {% if event.description %}
+                  <p class="text-muted-custom small mb-3">{{ event.description }}</p>
+                {% else %}
+                  <p class="text-muted-custom small mb-3">No description added.</p>
+                {% endif %}
+                <p class="small text-muted-custom mt-auto mb-3">
+                  <span aria-hidden="true">▣</span>
+                  <time datetime="{{ event.date.isoformat() }}">{{ event.date.strftime("%b %d, %Y") }}</time>
+                </p>
+                <div class="d-flex gap-2 border-top pt-3">
+                  <a class="btn btn-sm btn-outline-primary" href="{{ url_for('edit_event', id=event.id) }}">Edit</a>
+                  <form method="post" action="{{ url_for('delete_event', id=event.id) }}" onsubmit="return confirm('Delete this event?');">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state text-center p-5">
+        <div class="display-6 mb-2" aria-hidden="true">▦</div>
+        <h3 class="h5 fw-bold">{% if total_count %}No events found{% else %}Your calendar is wide open{% endif %}</h3>
+        <p class="text-muted-custom mb-3">
+          {% if total_count %}
+            Try another search or category filter.
+          {% else %}
+            Add your first event and start making room for what matters.
+          {% endif %}
+        </p>
+        {% if not total_count %}
+          <a class="btn btn-primary rounded-3" href="{{ url_for('add_event') }}">Create your first event</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

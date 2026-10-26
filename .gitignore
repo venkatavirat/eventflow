@@ -1,4 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+instance/
 node_modules/
 dist/
-.env*
+.vite/
+.env
+.env.*
 !.env.example
